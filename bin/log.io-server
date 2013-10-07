@@ -1,7 +1,27 @@
 #!/usr/bin/env node
-homeDir = process.env[(process.platform == 'win32') ? 'USERPROFILE' : 'HOME'];
-webConf = require(homeDir + '/.log.io/web_server.conf').config;
-logConf = require(homeDir + '/.log.io/log_server.conf').config;
+// defaults
+conf = '/etc/logio.conf'
+
+// config params
+process.argv.forEach(function(opt, index, array) {
+  if (opt.substring(0, 2) !== '--') return;
+  var setting = opt.split('=');
+  var key = setting[0].replace('--', '');
+  var value = setting[1];
+
+  switch(key) {
+    case 'config':
+      conf = value;
+      break;
+  }
+});
+
+console.log(conf);
+process.exit();
+
+logConf = require(conf).log;
+webConf = require(conf).web;
+
 server = require('log.io');
 logServer = new server.LogServer(logConf);
 webServer = new server.WebServer(logServer, webConf);
