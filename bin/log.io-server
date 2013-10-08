@@ -16,9 +16,6 @@ process.argv.forEach(function(opt, index, array) {
   }
 });
 
-console.log(conf);
-process.exit();
-
 logConf = require(conf).log;
 webConf = require(conf).web;
 
